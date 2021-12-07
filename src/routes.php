@@ -8,12 +8,23 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $this->view->render($response, 'index.latte');
 })->setName('index');
 
-$app->post('/test', function (Request $request, Response $response, $args) {
-    //read POST data
-    $input = $request->getParsedBody();
+$app->get('/coffeeshops', function (Request $request, Response $response, $args) {
+    // Render coffeeshops view
+    return $this->view->render($response, 'coffeeshops.latte');
+})->setName('coffeeshops');
 
-    //log
-    $this->logger->info('Your name: ' . $input['person']);
+$app->get('/add-coffeeshop', function (Request $request, Response $response, $args) {
+    // Render add-coffeeshop view
+    return $this->view->render($response, 'add-coffeeshop.latte');
+})->setName('add-coffeeshop');
 
-    return $response->withHeader('Location', $this->router->pathFor('index'));
-})->setName('redir');
+$app->get('/sign-up', function (Request $request, Response $response, $args) {
+    // Render sign-up view
+    return $this->view->render($response, 'sign-up.latte');
+})->setName('sign-up');
+
+$app->get('/login', function (Request $request, Response $response, $args) {
+    // Render login view
+    return $this->view->render($response, 'login.latte');
+})->setName('login');
+

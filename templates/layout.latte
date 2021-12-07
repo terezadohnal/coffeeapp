@@ -11,17 +11,22 @@
     {ifset meta}{include meta}{/ifset}
 </head>
 <body>
-    <main>
+<header>
+    <div>
+        <img src="{$basePath}/img/img-1.svg" alt="">
+    </div>
     <nav>
         <ul>
-            <li> <a href="{link index}"><i class="fas fa-home"></i></a></li>
-            <li> <a href="#">link1</a></li>
-            <li> <a href="#">link2</a></li>
-            <li> <a href="#">link3</a></li>
-            <li> <a href="#"><i class="fas fa-user"></i> Log in</a> </li>
+            <li> <a href="{link index}">HOME</a></li>
+            <li> <a href="{link coffeeshops}">COFFEESHOPS</a></li>
+            <li> <a href="{link add-coffeeshop}">ADD NEW COFFEESHOP</a></li>
+            <li> <a href="{link sign-up}">SIGN UP</a></li>
+            <li> <a href="{link login}">LOG IN</a> </li>
         </ul>
     </nav>
+</header>
 
+    <main>
     {include body}
     </main>
 </body>
