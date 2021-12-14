@@ -50,3 +50,26 @@ $app->get('/login', function (Request $request, Response $response, $args) {
     return $this->view->render($response, 'login.latte');
 })->setName('login');
 
+$app->post('/login', function (Request $request, Response $response, $args) {
+    $formData = $request->getParsedBody();
+    $passwd_hash = hash('sha256', $formData['password']);
+
+    $stmt = $this->db->prepare('SELECT id_person, first_name, nickname, last_name FROM users WHERE lower(nickname) = lower(:nn) AND password = :pw'); // zjisteni, zda existuje uzivatel s takovym jmemen a heslem
+    // :nn a :pw jsou vstupy od uzivatele
+    $stmt->bindValue(':nn', $formData['nickname']);
+    $stmt->bindValue(':pw', $formData['password']); //$passwd_hash
+    $stmt->execute();
+
+    $logged_user = $stmt->fetch(); // vrati true / false
+
+    if($logged_user){
+        $_SESSION['logged_user'] = $logged_user;
+        setcookie('first_name', $logged_user['first_name']);
+        // je do nej ukladam vystup z databazoveho dotazu
+        // dulezity radek pro prihlaseni a autentizaci uivatele, tato promenna zije po dobu celeho 'sezeni'
+        return $response->withHeader('Location', $this->router->pathFor('index')); //nastavujem hlavicku a url na seznam mych uzivatelu
+    }else {
+        return $this->view->render($response, 'sign-up.latte', ['message' => 'Wrong username']);
+        // v opacnem pripade ho posleme na prihlasovaci formular a posleme mu zpravu o chybnych udajich
+    }
+});
