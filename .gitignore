@@ -7,3 +7,4 @@
 !/cache/.gitignore
 /.env
 /vendor
+/database

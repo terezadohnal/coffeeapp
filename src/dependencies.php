@@ -19,15 +19,15 @@ $container['logger'] = function ($c) {
     return $logger;
 };
 
-// //database
-// $container['db'] = function ($c) {
-//     $db = $c['settings']['db'];
-//     $pdo = new PDO($db['dbtype'] . ":host=" . $db['dbhost'] . ";dbname=" . $db['dbname'], $db['dbuser'], $db['dbpass']);
-//     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-//     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-//     $pdo->query("SET NAMES 'utf8'");
-//     return $pdo;
-// };
+//database
+$container['db'] = function ($c) {
+    $db = $c['settings']['db'];
+    $pdo = new PDO('sqlite:../database/database.db');     
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    // $pdo->query("SET NAMES 'utf8'");
+    return $pdo;
+};
 
 $container['view'] = function ($container) use ($settings) {
     $engine = new Engine();

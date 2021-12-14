@@ -4,23 +4,24 @@
 
 {block body}
 
-<form method="post" class="sign-up-form">
-   <label for="first-name"> First name </label>
-      <input type="text" name="first-name" id="first-name" placeholder="First name" autofocus  required>
+<form method="post" action="/sign-up" class="sign-up-form">
 
-   <label for="last-name"> Last name </label>
-      <input type="text" name="last-name" id="last-name" placeholder="Last name" required>
+   <label for="first_name"> First name </label>
+      <input type="text" name="first_name" id="first_name" placeholder="First name" autofocus  required>
+
+   <label for="last_name"> Last name </label>
+      <input type="text" name="last_name" id="last_name" placeholder="Last name" required>
 
    <label for="nickname"> Nickname </label>
       <input type="text" name="nickname" id="nickname" placeholder="Nickname" required >
 
    <label for="birthday"> Birthday </label>
-      <input type="date" name="birthday" id="birthday" placeholder="Birthday" required >
+      <input type="date" name="birthday" id="birthday" placeholder="Birthday">
 
    <label for="sex"> Sex </label>
-   <select type="text" name="gender" id="sex" required>
-      <option value="male" >Male</option>
-      <option value="female" >Female</option>
+   <select type="text" name="gender" id="sex">
+      <option value="m" >Male</option>
+      <option value="f" >Female</option>
    </select>
 
    <label for="profession"> Profession </label>
