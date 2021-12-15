@@ -10,7 +10,24 @@ $app->get('/', function (Request $request, Response $response, $args) {
 
 $app->get('/coffeeshops', function (Request $request, Response $response, $args) {
     // Render coffeeshops view
-    return $this->view->render($response, 'coffeeshops.latte');
+    $params = $request->getQueryParams(); //[query => 'johnny']
+
+    if(! empty ($params['query'])){ //kontrolujem, zda uzivatel neco zadal
+        $stmt = $this->db->prepare('SELECT * FROM coffeeshops WHERE lower(name) = lower(:n) OR lower(town) = :twn');
+        $stmt->bindParam(':n', $params['query']);
+        $stmt->bindParam(':twn', $params['query']);
+        $stmt->execute();
+        $data['coffeeshops'] = $stmt->fetchall();
+        //utok na databazi - SQL injection, diky bindParams to zabezpecime, nesmime do vrchni listy propsat opravdove data
+    }else {
+        $stmt = $this->db->prepare('SELECT * FROM coffeeshops ORDER BY name');
+        $stmt->execute(); // zde mame ulozene data z databaze
+        $data['coffeeshops'] = $stmt->fetchall(); //ulozim do promenne vystup, databazovy objekt
+    }
+
+    //echo var_dump($data); //kontrola, zda to funguje
+
+    return $this->view->render($response, 'coffeeshops.latte', $data);
 })->setName('coffeeshops');
 
 $app->get('/add-coffeeshop', function (Request $request, Response $response, $args) {
@@ -25,6 +42,7 @@ $app->get('/sign-up', function (Request $request, Response $response, $args) {
 
 $app->post('/sign-up', function (Request $request, Response $response, $args){
     $formData = $request->getParsedBody();
+    $passwd_hash = hash('sha256', $formData['password']);
 
     // muzeme to zadat do databaze
 
@@ -37,7 +55,7 @@ $app->post('/sign-up', function (Request $request, Response $response, $args){
     $stmt->bindValue(':bd', empty($formData['birthday']) ? null : $formData['birthday']);
     $stmt->bindValue(':sx', empty($formData['sex']) ? null : $formData['sex']);
     $stmt->bindValue(':pf', $formData['profession']);
-    $stmt->bindValue(':pw', $formData['password']);
+    $stmt->bindValue(':pw', $passwd_hash);
     $stmt->execute();
     $data['message'] = 'Person successfully inserted';
     
@@ -57,7 +75,7 @@ $app->post('/login', function (Request $request, Response $response, $args) {
     $stmt = $this->db->prepare('SELECT id_person, first_name, nickname, last_name FROM users WHERE lower(nickname) = lower(:nn) AND password = :pw'); // zjisteni, zda existuje uzivatel s takovym jmemen a heslem
     // :nn a :pw jsou vstupy od uzivatele
     $stmt->bindValue(':nn', $formData['nickname']);
-    $stmt->bindValue(':pw', $formData['password']); //$passwd_hash
+    $stmt->bindValue(':pw', $passwd_hash);
     $stmt->execute();
 
     $logged_user = $stmt->fetch(); // vrati true / false
@@ -67,9 +85,16 @@ $app->post('/login', function (Request $request, Response $response, $args) {
         setcookie('first_name', $logged_user['first_name']);
         // je do nej ukladam vystup z databazoveho dotazu
         // dulezity radek pro prihlaseni a autentizaci uivatele, tato promenna zije po dobu celeho 'sezeni'
-        return $response->withHeader('Location', $this->router->pathFor('index')); //nastavujem hlavicku a url na seznam mych uzivatelu
+        return $response->withHeader('Location', $this->router->pathFor('coffeeshops')); //nastavujem hlavicku a url na seznam mych uzivatelu
     }else {
-        return $this->view->render($response, 'sign-up.latte', ['message' => 'Wrong username']);
+        return $this->view->render($response, 'login.latte', ['message' => 'Wrong username or password']);
         // v opacnem pripade ho posleme na prihlasovaci formular a posleme mu zpravu o chybnych udajich
     }
 });
+
+    //Logout user
+    $app->get('/logout', function (Request $request, Response $response, $args) {
+        session_destroy(); //tohle staci
+        return $response->withHeader('Location', $this->router->pathFor('index'));
+        //presmerovani
+    })->setName('logout');

@@ -1,6 +1,6 @@
 @import 'config';
 @import 'header';
-@import 'sign-up';
+@import 'forms';
 
 body {
     background-color: $secondary-color;
@@ -13,4 +13,11 @@ body {
 a {
     color: set-text-color($secondary-color);
     text-decoration: none;
+}
+
+h1 {
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    word-spacing: 0.5rem;
 }

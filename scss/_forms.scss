@@ -1,11 +1,38 @@
-.sign-up-form {
+.form {
     display: flex;
     flex-direction: column;
     margin: 40px auto;
     width: 100%;
     max-width: 300px;
 
-    input, select {
+    input, select, .day, .service {
         margin-bottom: 10px;
+    }
+
+    .opening-time, .pair {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .opening-time {
+        gap: 10px;
+    }
+
+    .pair {
+        gap: 10px;
+        align-items: center;
+        input{
+            width: 80%;
+            margin: 0;
+        }
+    }
+
+    p {
+        margin: 0;
+    }
+
+    .offer, .service {
+        display: flex;
+        flex-direction: column;
     }
 }

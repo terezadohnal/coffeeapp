@@ -6,7 +6,11 @@
 
 <h1>Login</h1>
 
-<form method="post" action="/login" class="sign-up-form">
+{if isset($message)} 
+<p>{$message}</p>
+{/if}
+
+<form method="post" action="/login" class="form">
 
    <label for="nickname"> Nickname </label>
       <input type="text" name="nickname" id="nickname" placeholder="Nickname" autofocus  required>

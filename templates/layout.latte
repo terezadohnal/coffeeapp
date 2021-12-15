@@ -16,7 +16,10 @@
 <body>
 <header>
     <div class="header-img">
-        <img src="{$basePath}/img/img-1.svg" alt="">
+        <a href="{link index}">
+            <img src="{$basePath}/img/main-logo.png" alt="">
+        </a>
+
     </div>
     <nav class="nav">
         <ul class="menu">
@@ -26,15 +29,21 @@
             <li class="menu-item"> 
                 <a href="{link coffeeshops}" class="menu-nav-link">COFFEESHOPS</a>
             </li>
+            {if isset($loggedUser)}
             <li class="menu-item"> 
                 <a href="{link add-coffeeshop}" class="menu-nav-link">ADD NEW COFFEESHOP</a>
             </li>
+            <li class="menu-item"> 
+                <a href="{link logout}" class="menu-nav-link">LOG OUT</a> 
+            </li>
+            {else}
             <li class="menu-item"> 
                 <a href="{link sign-up}" class="menu-nav-link">SIGN UP</a>
             </li>
             <li class="menu-item"> 
                 <a href="{link login}" class="menu-nav-link">LOG IN</a> 
             </li>
+            {/if}
         </ul>
     </nav>
 </header>

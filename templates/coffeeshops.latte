@@ -5,4 +5,37 @@
 {block body}
    <h1>List of all coffeeshops</h1>
 
+   <section>
+
+  <table class="fl-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Town</th>
+        <th colspan="2">Action</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {foreach $coffeeshops as $cs}
+        <tr>
+      {* muzeme pristupovat k logeed_user protoze to mame ulozene v middleware *}
+        <td>
+         {$cs['name']}
+         </td> {* pristupujeme k tomu skrz jmena klicu *}
+        <td>
+         {$cs['city']}
+        </td>
+        <td> 
+         <button>
+            <i class="far fa-trash-alt"></i> Delete
+         </button>
+        </td>
+      </tr>
+      
+      {/foreach}
+    </tbody>
+  </table>
+</section>
+
 {/block}

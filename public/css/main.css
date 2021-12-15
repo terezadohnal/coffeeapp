@@ -62,7 +62,7 @@
           transition-delay: 0.55s;
 }
 
-.sign-up-form {
+.form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -75,8 +75,48 @@
   max-width: 300px;
 }
 
-.sign-up-form input, .sign-up-form select {
+.form input, .form select, .form .day, .form .service {
   margin-bottom: 10px;
+}
+
+.form .opening-time, .form .pair {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.form .opening-time {
+  gap: 10px;
+}
+
+.form .pair {
+  gap: 10px;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.form .pair input {
+  width: 80%;
+  margin: 0;
+}
+
+.form p {
+  margin: 0;
+}
+
+.form .offer, .form .service {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 body {
@@ -90,5 +130,16 @@ body {
 a {
   color: #272727;
   text-decoration: none;
+}
+
+h1 {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-transform: uppercase;
+  word-spacing: 0.5rem;
 }
 /*# sourceMappingURL=main.css.map */
