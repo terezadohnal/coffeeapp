@@ -1,11 +1,36 @@
+@include media-sm {
+    .header-img {
+        margin: 20px 0;
+    }
+
+    .menu {
+        .menu-item {
+            a {
+                padding: 0.25rem 0.15rem;
+                font-size: 1rem;
+            }
+    
+        }
+    }
+}
+
 @include media-md {
+    .header-img {
+        margin: 20px 0;
+    }
     .menu {
         .menu-item {
             a {
                 padding: 0.5rem 0.25rem;
                 font-size: 1.5rem;
             }
-
+    
         }
+    }
+}
+
+@include media-lg {
+    .header-img {
+        margin: 30px 0;
     }
 }

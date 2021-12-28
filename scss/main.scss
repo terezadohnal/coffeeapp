@@ -1,6 +1,8 @@
 @import 'config';
 @import 'header';
 @import 'forms';
+@import 'table';
+@import 'responsive';
 
 body {
     background-color: $secondary-color;

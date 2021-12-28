@@ -1,21 +1,32 @@
+header {
+    width: 100%;
+}
+
 .header-img {
-    height: 330px;
+    width: 100%;
+    height: auto;
     display: flex;
     justify-content: center;
-    margin: 30px 0;
+
+    a{
+        width: 100%;
+    }
 
     img {
-        height: 100%;
+        width: 100%;
     }
+
+
 }
 
 .menu {
     display: flex;
     list-style: none;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 0;
     padding: 0;
     border: 0.2rem groove $menu-color;
+    flex-wrap: wrap;
 
     li {
         a {

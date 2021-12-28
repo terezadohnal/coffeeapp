@@ -1,16 +1,24 @@
+header {
+  width: 100%;
+}
+
 .header-img {
-  height: 330px;
+  width: 100%;
+  height: auto;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  margin: 30px 0;
+}
+
+.header-img a {
+  width: 100%;
 }
 
 .header-img img {
-  height: 100%;
+  width: 100%;
 }
 
 .menu {
@@ -18,12 +26,13 @@
   display: -ms-flexbox;
   display: flex;
   list-style: none;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
   margin: 0;
   padding: 0;
   border: 0.2rem groove #aea0d8;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 
 .menu li a {
@@ -117,6 +126,47 @@
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+}
+
+.fl-table {
+  border: none;
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 100%;
+  white-space: nowrap;
+  background-color: white;
+}
+
+.fl-table td,
+.fl-table th {
+  text-align: center;
+  padding: 8px;
+}
+
+@media screen and (max-width: 320px) {
+  .header-img {
+    margin: 20px 0;
+  }
+  .menu .menu-item a {
+    padding: 0.25rem 0.15rem;
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-img {
+    margin: 20px 0;
+  }
+  .menu .menu-item a {
+    padding: 0.5rem 0.25rem;
+    font-size: 1.5rem;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .header-img {
+    margin: 30px 0;
+  }
 }
 
 body {

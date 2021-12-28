@@ -24,14 +24,35 @@ $app->get('/coffeeshops', function (Request $request, Response $response, $args)
         $stmt->execute(); // zde mame ulozene data z databaze
         $data['coffeeshops'] = $stmt->fetchall(); //ulozim do promenne vystup, databazovy objekt
     }
-
     //echo var_dump($data); //kontrola, zda to funguje
 
     return $this->view->render($response, 'coffeeshops.latte', $data);
 })->setName('coffeeshops');
 
+$app->get('/coffeeshops/profile/', function (Request $request, Response $response, $args) {
+    // Render add-coffeeshop view
+    return $this->view->render($response, 'profile.latte');
+})->setName('profile');
+
+
 $app->get('/add-coffeeshop', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
+    return $this->view->render($response, 'add-coffeeshop.latte');
+})->setName('add-coffeeshop');
+
+$app->post('/add-coffeeshop', function (Request $request, Response $response, $args) {
+    // Render add-coffeeshop view
+    $formData = $request->getParsedBody();
+    // $stmt = $this->db->prepare('INSERT ALL INTO coffeeshops (name, address, city) VALUES (:n, :adr, :ct) INTO openning_hours (day, from, to) VALUES (:d, :f, :t)');
+
+    // $stmt->bindValue(':n', $formData['name']);
+    // $stmt->bindValue(':adr', $formData['address']);
+    // $stmt->bindValue(':ct', $formData['city']);
+    // $stmt->bindValue(':d', $formData['day']);
+    // $stmt->bindValue(':f', $formData['from']);
+    // $stmt->bindValue(':t', $formData['to']);
+    $stmt->execute();
+    $data['formData'] = $formData;
     return $this->view->render($response, 'add-coffeeshop.latte');
 })->setName('add-coffeeshop');
 
