@@ -4,6 +4,179 @@
 
 {block body}
 
-<h1>Coffeeshops profile</h1>
+<h1>{$coffeeshop['name']}</h1>
+
+<div class="content">
+    <div class="photo">
+        <img src="https://images.unsplash.com/photo-1599229809585-f92ea053b547?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" alt="">
+    </div>
+
+    <div class="text-content">
+        <div class="profile-content">
+            <h3>Adress</h3>
+                <div class="option">
+                    <p>{$coffeeshop['address']}</p>
+                </div>
+
+            <h3>City</h3>
+                <div class="option">
+                    <p>{$coffeeshop['city']}</p>
+                </div>
+
+            <h3>This friendly they are</h3>
+                {if $service['wifi'] == 1}
+                    <div class="option">
+                        <p>Wifi</p>
+                    </div>
+                {/if}
+
+                {if $service['laptop'] == 1}
+                    <div class="option">
+                        <p>Laptop friendly</p>
+                    </div>    
+                {/if}
+                
+                {if $service['vegan'] == 1}
+                    <div class="option">
+                        <p>Vegan friendly</p>
+                    </div>    
+                {/if}
+                
+                {if $service['kids'] == 1}
+                    <div class="option">
+                        <p>Kids friendly</p>
+                    </div>    
+                {/if}
+                
+                {if $service['wheelchair'] == 1}
+                    <div class="option">
+                        <p>Wheelchair accessible</p>
+                    </div>    
+                {/if}
+                
+                {if $service['outdoor_seating'] == 1}
+                    <div class="option">
+                        <p>Outdoor seating</p>
+                    </div>    
+                {/if}
+                
+                {if $service['creditcard_payments'] == 1}
+                    <div class="option">
+                        <p>Creditcard payments</p>
+                    </div>    
+                {/if}
+                
+
+            <h3>What can they offer</h3>
+
+                {if $offer['espresso'] == 1}
+                    <div class="option">
+                        <p>Espresso</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['filter'] == 1}
+                    <div class="option">
+                        <p>Filter</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['plant_based'] == 1}
+                    <div class="option">
+                        <p>Plant based option</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['breakfast'] == 1}
+                    <div class="option">
+                        <p>Breakfast</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['brunch'] == 1}
+                    <div class="option">
+                        <p>Brunch</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['lunch'] == 1}
+                    <div class="option">
+                        <p>Lunch</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['alcohol'] == 1}
+                    <div class="option">
+                        <p>Alcohol</p>
+                    </div>    
+                {/if}
+                
+                {if $offer['sweets'] == 1}
+                    <div class="option">
+                        <p>Sweets</p>
+                    </div>    
+                {/if}
+                
+
+        </div>
+
+        <div class="opening-hours">
+            <h3>Opening hours</h3>
+
+            {foreach $opening_hours as $oh}
+            {if $oh["day"] == 1}
+            <div class="day">
+                <p>Monday</p>
+                <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {if $oh['day'] == 2}
+            <div class="day">
+            <p>Tuesday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {if $oh['day'] == 3}
+            <div class="day">
+            <p>Wednesday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {if $oh['day'] == 4}
+            <div class="day">
+            <p>Thursday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+        
+            {if $oh['day'] == 5}
+            <div class="day">
+            <p>Friday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {if $oh['day'] == 6}
+            <div class="day">
+            <p>Saturday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {if $oh['day'] == 7}
+            <div class="day">
+            <p>Sunday</p>
+            <p>{$oh['from']} - {$oh['to']}</p>
+            </div>
+            {/if}
+
+            {/foreach}
+        </div>
+</div>
+</div>
+
 
 {/block}

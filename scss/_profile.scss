@@ -1,0 +1,42 @@
+.content {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+
+    .text-content {
+        display: flex;
+        flex-direction: row;
+        width: 60%;
+
+        .day {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    .profile-content, .opening-hours {
+        border: 1px solid $menu-color;
+        width: 50%;
+        padding: 0 30px;
+
+        .option {
+            display: flex;
+        }
+    }
+
+    .opening-hours {
+        border-left: none;
+    }
+
+    .photo {
+        width: 40%;
+        
+        img {
+            width: 100%;
+            border: 1px solid $menu-color;
+            border-right: none;
+        }
+    }
+}

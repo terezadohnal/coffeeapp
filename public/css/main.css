@@ -30,7 +30,7 @@ header {
       justify-content: space-around;
   margin: 0;
   padding: 0;
-  border: 0.2rem groove #aea0d8;
+  border-bottom: 0.2rem solid #aea0d8;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
 }
@@ -40,7 +40,7 @@ header {
   font-weight: 700;
   font-size: 2rem;
   text-transform: uppercase;
-  text-shadow: 0.2rem 0.2rem 0.5rem #ECFFF8;
+  text-shadow: 0.2rem 0.2rem 0.5rem #dbfaef;
   padding: 1rem 0.5rem;
   font-weight: 300;
   -webkit-transition: all 0.5s ease-in-out;
@@ -88,6 +88,33 @@ header {
   margin-bottom: 10px;
 }
 
+.form input, .form select {
+  border: none;
+  border-bottom: 1px solid #585858;
+  background-color: transparent;
+  margin: 15px 0;
+  padding-bottom: 5px;
+  width: 100%;
+  outline: none;
+}
+
+.form button {
+  margin: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  font-size: 1.25rem;
+  border-bottom: 0.2rem solid #aea0d8;
+  border-right: 0.2rem solid #6c5aa1;
+  -webkit-box-shadow: 5px 10px #6c5aa1;
+          box-shadow: 5px 10px #6c5aa1;
+  background-color: transparent;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  letter-spacing: 0.2rem;
+}
+
 .form .opening-time, .form .pair {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -96,6 +123,10 @@ header {
   -webkit-box-direction: normal;
       -ms-flex-direction: row;
           flex-direction: row;
+}
+
+.form #file {
+  border-bottom: none;
 }
 
 .form .opening-time {
@@ -112,6 +143,7 @@ header {
 .form .pair input {
   width: 80%;
   margin: 0;
+  padding: 0;
 }
 
 .form p {
@@ -128,19 +160,92 @@ header {
           flex-direction: column;
 }
 
-.fl-table {
-  border: none;
-  border-collapse: collapse;
-  width: 100%;
-  max-width: 100%;
-  white-space: nowrap;
-  background-color: white;
+.form .offer div, .form .service div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 10px 0;
 }
 
-.fl-table td,
-.fl-table th {
-  text-align: center;
-  padding: 8px;
+.form .offer div input, .form .service div input {
+  margin: 0;
+  width: auto;
+}
+
+.form .offer div label, .form .service div label {
+  margin-left: 10px;
+}
+
+.container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[3];
+      grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin: auto;
+  padding: 0 20px;
+  max-width: 1024px;
+}
+
+.card {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  padding: 10px 10px;
+  border: 1px solid #aea0d8;
+  -webkit-box-shadow: 5px 4px #dbfaef;
+          box-shadow: 5px 4px #dbfaef;
+  border-radius: 20px;
+}
+
+.card .img img {
+  width: 70px;
+  border-radius: 15px;
+}
+
+.card .text {
+  margin-left: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.card .text h3, .card .text h4 {
+  margin: 0;
+}
+
+.card .text h3 {
+  margin-bottom: 10px;
+}
+
+.card .text p {
+  margin: 0;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
+}
+
+.card .text p a {
+  -webkit-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  color: #6c5aa1;
+}
+
+.card .text p a:hover {
+  color: #272727;
 }
 
 @media screen and (max-width: 320px) {
@@ -169,12 +274,70 @@ header {
   }
 }
 
+.content {
+  width: 80%;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+  padding-top: 20px;
+}
+
+.content .text-content {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 60%;
+}
+
+.content .text-content .day {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.content .profile-content, .content .opening-hours {
+  border: 1px solid #aea0d8;
+  width: 50%;
+  padding: 0 30px;
+}
+
+.content .profile-content .option, .content .opening-hours .option {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.content .opening-hours {
+  border-left: none;
+}
+
+.content .photo {
+  width: 40%;
+}
+
+.content .photo img {
+  width: 100%;
+  border: 1px solid #aea0d8;
+  border-right: none;
+}
+
 body {
   background-color: #f8f7f7;
   color: #272727;
   font-family: 'Poppins', sans-serif;
-  height: 100vh;
+  min-height: 100vh;
   line-height: 1;
+  margin-bottom: 100px;
 }
 
 a {

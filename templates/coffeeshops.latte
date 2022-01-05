@@ -5,9 +5,7 @@
 {block body}
    <h1>List of all coffeeshops</h1>
 
-   <section>
-
-  <table class="fl-table">
+  <!-- {* <table class="fl-table">
     <thead>
       <tr>
         <th>Name</th>
@@ -19,10 +17,9 @@
     <tbody>
       {foreach $coffeeshops as $cs}
         <tr>
-      {* muzeme pristupovat k logeed_user protoze to mame ulozene v middleware *}
         <td>
          {$cs['name']}
-         </td> {* pristupujeme k tomu skrz jmena klicu *}
+         </td> 
         <td>
          {$cs['city']}
         </td>
@@ -35,8 +32,39 @@
       
       {/foreach}
     </tbody>
-  </table>
-</section>
+  </table> *} 
 
+$key=>
+-->
+
+    <div class="container">
+      {foreach $coffeeshops as $cs} 
+      <div class="card">
+        <div class="img">
+          <img src="https://images.unsplash.com/photo-1599229809585-f92ea053b547?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3024&q=80" alt="">
+        </div>
+
+        <div class="text">
+          <div class="text-headers">
+            <h3>{$cs['name']}</h3>
+            <h4>{$cs['city']}</h4>   
+          </div>
+          <p><a href="{link profile}?id_coffeeshop={$cs['id_coffeeshop']}">Show Profile</a></p>
+        </div>
+
+      </div>
+    
+    <!-- {* <div class="card">
+      <h3>Name</h3>
+      <h4>City</h4>
+      <h5>View more >></h5>
+    </div>
+    <div class="card">
+      <h3>Name</h3>
+      <h4>City</h4>
+      <h5>View more >></h5>
+    </div> *} -->
+    {/foreach}
+  </div>
 {/block}
 

@@ -8,41 +8,79 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $this->view->render($response, 'index.latte');
 })->setName('index');
 
-$app->get('/coffeeshops', function (Request $request, Response $response, $args) {
-    // Render coffeeshops view
-    $params = $request->getQueryParams(); //[query => 'johnny']
+// $app->get('/coffeeshops', function (Request $request, Response $response, $args) {
+//     // Render coffeeshops view
+//     // $params = $request->getQueryParams(); //[query => 'johnny']
 
-    if(! empty ($params['query'])){ //kontrolujem, zda uzivatel neco zadal
-        $stmt = $this->db->prepare('SELECT * FROM coffeeshops WHERE lower(name) = lower(:n) OR lower(town) = :twn');
-        $stmt->bindParam(':n', $params['query']);
-        $stmt->bindParam(':twn', $params['query']);
-        $stmt->execute();
-        $data['coffeeshops'] = $stmt->fetchall();
-        //utok na databazi - SQL injection, diky bindParams to zabezpecime, nesmime do vrchni listy propsat opravdove data
-    }else {
+//     // if(! empty ($params['query'])){ //kontrolujem, zda uzivatel neco zadal
+//     //     $stmt = $this->db->prepare('SELECT * FROM coffeeshops WHERE lower(name) = lower(:n) OR lower(town) = :twn');
+//     //     $stmt->bindParam(':n', $params['query']);
+//     //     $stmt->bindParam(':twn', $params['query']);
+//     //     $stmt->execute();
+//     //     //utok na databazi - SQL injection, diky bindParams to zabezpecime, nesmime do vrchni listy propsat opravdove data
+//     // }else {
+//         $stmt = $this->db->prepare('SELECT * FROM coffeeshops ORDER BY name');
+//         $stmt->execute(); // zde mame ulozene data z databaze
+//     // }
+//     //echo var_dump($data); //kontrola, zda to funguje
+//     $data['coffeeshops'] = $stmt->fetchall(); //ulozim do promenne vystup, databazovy objekt
+// echo var_export($data);
+//     return $this->view->render($response, 'coffeeshops.latte', $data);
+// })->setName('coffeeshops');
+
+$app->get('/coffeeshops', function (Request $request, Response $response, $args) {
+    // Render index view
         $stmt = $this->db->prepare('SELECT * FROM coffeeshops ORDER BY name');
         $stmt->execute(); // zde mame ulozene data z databaze
-        $data['coffeeshops'] = $stmt->fetchall(); //ulozim do promenne vystup, databazovy objekt
-    }
-    //echo var_dump($data); //kontrola, zda to funguje
+        $data['coffeeshops'] = $stmt->fetchall();
 
     return $this->view->render($response, 'coffeeshops.latte', $data);
 })->setName('coffeeshops');
 
-$app->get('/coffeeshops/profile/', function (Request $request, Response $response, $args) {
+$app->get('/coffeeshop/profile', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
-    return $this->view->render($response, 'profile.latte');
+    $id_coffeeshop = $request->getQueryParam('id_coffeeshop');
+
+    $stmt = $this->db->prepare('SELECT * FROM coffeeshops WHERE id_coffeeshop = :idc');
+    $stmt->bindParam(':idc', $id_coffeeshop);
+    $stmt->execute();
+    $data['coffeeshop'] = $stmt->fetch();
+
+    $stmt = $this->db->prepare('SELECT * FROM offer WHERE id_coffeeshop = :idc');
+    $stmt->bindParam(':idc', $id_coffeeshop);
+    $stmt->execute();
+    $data['offer'] = $stmt->fetch();
+
+    $stmt = $this->db->prepare('SELECT * FROM service WHERE id_coffeeshop = :idc');
+    $stmt->bindParam(':idc', $id_coffeeshop);
+    $stmt->execute();
+    $data['service'] = $stmt->fetch();
+
+    $stmt = $this->db->prepare('SELECT * FROM opening_hours WHERE id_coffeeshop = :idc ORDER BY day ASC');
+    $stmt->bindParam(':idc', $id_coffeeshop);
+    $stmt->execute();
+    $data['opening_hours'] = $stmt->fetchall();
+
+    // echo var_dump($data['opening_hours']); 
+    // echo var_dump($data['coffeeshop']); 
+
+    return $this->view->render($response, 'profile.latte', $data);
 })->setName('profile');
 
 
 $app->get('/add-coffeeshop', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
+    
+
     return $this->view->render($response, 'add-coffeeshop.latte');
 })->setName('add-coffeeshop');
 
 $app->post('/add-coffeeshop', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
     $formData = $request->getParsedBody();
+    if ( empty($formData['first_name']) || empty($formData['last_name']) || empty($formData['nickname']) ) {
+		$tplVars['message'] = 'Please fill required fields!';
+	} else {
     // $stmt = $this->db->prepare('INSERT ALL INTO coffeeshops (name, address, city) VALUES (:n, :adr, :ct) INTO openning_hours (day, from, to) VALUES (:d, :f, :t)');
 
     // $stmt->bindValue(':n', $formData['name']);
@@ -51,8 +89,19 @@ $app->post('/add-coffeeshop', function (Request $request, Response $response, $a
     // $stmt->bindValue(':d', $formData['day']);
     // $stmt->bindValue(':f', $formData['from']);
     // $stmt->bindValue(':t', $formData['to']);
-    $stmt->execute();
-    $data['formData'] = $formData;
+        try {
+
+            $stmt->execute();
+            $stmt['message'] = 'Person successfully added';
+            $this->db->commit();
+        }catch (PDOexception $e){
+            $stmt['message'] = 'Something went wrong';
+            $this->logger->error($e->getMessage());
+            $this->db->rollback();
+        }
+        $data['formData'] = $formData;
+
+    }
     return $this->view->render($response, 'add-coffeeshop.latte');
 })->setName('add-coffeeshop');
 
