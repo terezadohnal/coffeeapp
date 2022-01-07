@@ -40,3 +40,32 @@
         }
     }
 }
+
+.modification{
+    width: 80%;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+
+    .btn {
+        border: 1px solid $menu-color;
+        width: 100%;
+        display: flex;
+
+        a {
+            padding: 30px 0;
+            width: 100%;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-align: center;
+
+            @include transition-ease;
+
+            &:hover {
+                background-color: $menu-color;
+                color: whitesmoke;
+            }
+        }
+    }
+}

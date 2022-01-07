@@ -67,7 +67,44 @@ $app->get('/coffeeshop/profile', function (Request $request, Response $response,
     return $this->view->render($response, 'profile.latte', $data);
 })->setName('profile');
 
+//Edit coffeeshop's info - nacitani
+$app->get('/edit-coffeeshop', function (Request $request, Response $response, $args) {
+    // Render add-coffeeshop view
+    
+    
+    return $this->view->render($response, 'edit-coffeeshop.latte');
+})->setName('edit-coffeeshop');
 
+//Delete coffeeshop
+$app->get('/delete-coffeeshop', function (Request $request, Response $response, $args) {
+    // Render add-coffeeshop view
+    $id_coffeeshop = $request->getQueryParam('id_coffeeshop'); //vyctu id coffeeshopu z url
+
+    if(!empty($id_coffeeshop)){
+        try{
+            $stmt = $this->db->prepare('DELETE FROM coffeeshops WHERE id_coffeeshop = :idc');
+            $stmt->bindValue(':idc', $id_coffeeshop);
+            $stmt->execute();
+            $stmt = $this->db->prepare('DELETE FROM opening_hours WHERE id_coffeeshop = :idc');
+            $stmt->bindValue(':idc', $id_coffeeshop);
+            $stmt->execute();
+            $stmt = $this->db->prepare('DELETE FROM service WHERE id_coffeeshop = :idc');
+            $stmt->bindValue(':idc', $id_coffeeshop);
+            $stmt->execute();
+            $stmt = $this->db->prepare('DELETE FROM offer WHERE id_coffeeshop = :idc');
+            $stmt->bindValue(':idc', $id_coffeeshop);
+            $stmt->execute();
+        } catch (PDOexception $e) {
+            exit("error occured");
+        }
+    } else {
+        exit("Person is missing");
+    }
+
+    return $response->withHeader('Location', $this->router->pathFor('coffeeshops'));
+})->setName('delete-coffeeshop');
+
+//Add new cofffeshop
 $app->get('/add-coffeeshop', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
     
@@ -78,31 +115,66 @@ $app->get('/add-coffeeshop', function (Request $request, Response $response, $ar
 $app->post('/add-coffeeshop', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
     $formData = $request->getParsedBody();
-    if ( empty($formData['first_name']) || empty($formData['last_name']) || empty($formData['nickname']) ) {
-		$tplVars['message'] = 'Please fill required fields!';
+    $id_user = 1;
+    $id_coffeeshop = null;
+
+
+    if ( empty($formData['name']) || empty($formData['address']) || empty($formData['city']) ) {
+		$data['message'] = 'Please fill required fields!';
 	} else {
-    // $stmt = $this->db->prepare('INSERT ALL INTO coffeeshops (name, address, city) VALUES (:n, :adr, :ct) INTO openning_hours (day, from, to) VALUES (:d, :f, :t)');
 
-    // $stmt->bindValue(':n', $formData['name']);
-    // $stmt->bindValue(':adr', $formData['address']);
-    // $stmt->bindValue(':ct', $formData['city']);
-    // $stmt->bindValue(':d', $formData['day']);
-    // $stmt->bindValue(':f', $formData['from']);
-    // $stmt->bindValue(':t', $formData['to']);
-        try {
-
+            $stmt = $this->db->prepare('INSERT INTO coffeeshops (name, address, city, id_user) VALUES (:nm, :adr, :city, :idu)');
+            $stmt->bindValue(':nm', $formData['name']);
+            $stmt->bindValue(':adr', $formData['address']);
+            $stmt->bindValue(':city', $formData['city']);
+            $stmt->bindValue(':idu', $id_user);
             $stmt->execute();
-            $stmt['message'] = 'Person successfully added';
-            $this->db->commit();
-        }catch (PDOexception $e){
-            $stmt['message'] = 'Something went wrong';
-            $this->logger->error($e->getMessage());
-            $this->db->rollback();
-        }
+            $data['message'] = 'Person successfully added';
+
+            $tmp = $this->db->prepare('SELECT max(id_coffeeshop) as id FROM coffeeshops');
+            $tmp->execute();
+            $id_coffeeshop = $tmp->fetch();
+
+
+            $stmt = $this->db->prepare('INSERT INTO offer (espresso, filter, plant_based, breakfast, brunch, lunch, alcohol, sweets, id_coffeeshop) VALUES (:esp, :filter, :pb, :bf, :brunch, :lunch, :alco, :sw, :idc)');
+            $stmt->bindValue(':esp', empty($formData['espresso']) ? 0 : 1);
+            $stmt->bindValue(':filter', empty($formData['filter']) ? 0 : 1);
+            $stmt->bindValue(':pb', empty($formData['plant-based']) ? 0 : 1);
+            $stmt->bindValue(':bf', empty($formData['breakfast']) ? 0 : 1);
+            $stmt->bindValue(':brunch', empty($formData['brunch']) ? 0 : 1);
+            $stmt->bindValue(':lunch', empty($formData['lunch']) ? 0 : 1);
+            $stmt->bindValue(':alco', empty($formData['alcohol']) ? 0 : 1);
+            $stmt->bindValue(':sw', empty($formData['sweets']) ? 0 : 1);
+            $stmt->bindValue(':idc', $id_coffeeshop['id'] ? $id_coffeeshop['id'] : 0);
+            $stmt->execute();
+
+            $stmt = $this->db->prepare('INSERT INTO service (wifi, laptop, vegan, kids, dogs, wheelchair, outdoor_seating, creditcard_payments, id_coffeeshop) VALUES (:wf, :lt, :vg, :kds, :dgs, :wch, :os, :ccp, :idc)');
+            $stmt->bindValue(':wf', empty($formData['wifi']) ? 0 : 1);
+            $stmt->bindValue(':lt', empty($formData['laptop']) ? 0 : 1);
+            $stmt->bindValue(':vg', empty($formData['vegan']) ? 0 : 1);
+            $stmt->bindValue(':kds', empty($formData['kids']) ? 0 : 1);
+            $stmt->bindValue(':dgs', empty($formData['dogs']) ? 0 : 1);
+            $stmt->bindValue(':wch', empty($formData['wheelchair']) ? 0 : 1);
+            $stmt->bindValue(':os', empty($formData['outdoor-seating']) ? 0 : 1);
+            $stmt->bindValue(':ccp', empty($formData['creditcard']) ? 0 : 1);
+            $stmt->bindValue(':idc', $id_coffeeshop['id'] ? $id_coffeeshop['id'] : 0);
+            $stmt->execute();
+
+            for($i = 1; $i <= 7; $i++){
+                $stmt = $this->db->prepare('INSERT INTO opening_hours (id_coffeeshop, day, time_from, time_to) VALUES (:idc, :d, :f, :t)');
+                $stmt->bindValue('idc', $id_coffeeshop['id'] ? $id_coffeeshop['id'] : 0);
+                $stmt->bindValue('d', $i);
+                $stmt->bindValue('f', empty($formData["$i-from"]) ? 0 : $formData["$i-from"]);
+                $stmt->bindValue('t', empty($formData["$i-to"]) ? 0 : $formData["$i-to"]);
+                $stmt->execute();
+            }
+
+
         $data['formData'] = $formData;
+        echo var_export($data);
 
     }
-    return $this->view->render($response, 'add-coffeeshop.latte');
+    return $this->view->render($response, 'add-coffeeshop.latte', $data);
 })->setName('add-coffeeshop');
 
 $app->get('/sign-up', function (Request $request, Response $response, $args) {
