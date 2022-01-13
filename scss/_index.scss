@@ -1,0 +1,21 @@
+.articles {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 60%;
+
+    section {
+        text-align: center;
+
+        h1 {
+            color: $dark-grey;
+        }
+
+        .text {
+            h4 {
+                color: $menu-color;
+            }
+        }
+
+    }
+}

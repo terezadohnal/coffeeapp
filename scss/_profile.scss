@@ -69,3 +69,43 @@
         }
     }
 }
+
+.review-body{
+    display: flex;
+    flex-direction: column;
+    padding-top: none;
+    .review {
+        display: flex;
+        flex-direction: column;
+        margin: 0 auto;
+        width: 60%;
+        border: 1px solid $menu-color;
+        padding: 15px;
+        margin-bottom: 15px;
+
+        .little-header{
+            h3, h4 {
+                margin-top: 0;
+
+                span {
+                    padding: 0 5px;
+                    color: $menu-color;
+                    font-size: 20px;
+                    vertical-align: center;
+                }
+            }
+            border-bottom: 1px solid $menu-color;
+
+        }
+    }
+}
+
+.subtitle {
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+    word-spacing: 0.5rem;
+    padding: 0.7rem 0;
+    color: $dark-grey;
+    font-weight: bold;
+}

@@ -6,6 +6,7 @@ use Latte\PhpWriter;
 use Latte\Loaders\FileLoader;
 use Ujpef\LatteView;
 
+
 // DIC configuration
 
 $container = $app->getContainer();

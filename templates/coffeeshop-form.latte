@@ -3,7 +3,7 @@
 {/if}
 
 <h1>{$title}</h1>   
-   <form method="post" class="form">
+   <form method="post" class="form" enctype="multipart/form-data">
 
    <label for="name"> Name </label>
       <input type="text" name="name" id="name" placeholder="Name" value="{$coffeeshop['name']}" autofocus  required>
@@ -15,7 +15,7 @@
       <input type="text" name="city" id="city" placeholder="City" value="{$coffeeshop['city']}">
    
    <label for="file"> Photo </label>
-      <input type="file" name="file" id="file">
+      <input type="file" name="file" id="file" accept=".jpg,.png,.jpeg">
 
       <h4>Openning hours
       </h4>

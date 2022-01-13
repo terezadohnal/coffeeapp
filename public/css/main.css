@@ -176,6 +176,45 @@ header {
   margin-left: 10px;
 }
 
+.review-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  max-width: -webkit-fit-content;
+  max-width: -moz-fit-content;
+  max-width: fit-content;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.review-section .lines .username, .review-section .lines .rating {
+  margin: auto;
+  width: 50%;
+}
+
+.review-section .review {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.review-section .review label {
+  width: 50%;
+  margin: auto;
+}
+
+.review-section .review textarea {
+  margin: 15px 0;
+  border: none;
+  -webkit-box-shadow: 5px 10px #dbfaef;
+          box-shadow: 5px 10px #dbfaef;
+}
+
 .container {
   display: -ms-grid;
   display: grid;
@@ -224,12 +263,35 @@ header {
           flex-direction: column;
 }
 
-.card .text h3, .card .text h4 {
+.card .text-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.card .text-header h3, .card .text-header h4 {
   margin: 0;
 }
 
-.card .text h3 {
+.card .text-header h3 {
   margin-bottom: 10px;
+}
+
+.card .text-header .rating {
+  margin: auto 0;
+}
+
+.card .text-header .rating p {
+  font-size: 20px;
+  font-weight: bold;
+  color: #aea0d8;
 }
 
 .card .text p {
@@ -256,6 +318,16 @@ header {
     padding: 0.25rem 0.15rem;
     font-size: 1rem;
   }
+  .container {
+    grid: none;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+  }
 }
 
 @media screen and (max-width: 768px) {
@@ -265,6 +337,10 @@ header {
   .menu .menu-item a {
     padding: 0.5rem 0.25rem;
     font-size: 1.5rem;
+  }
+  .container {
+    -ms-grid-columns: (1fr)[2];
+        grid-template-columns: repeat(2, 1fr);
   }
 }
 
@@ -365,13 +441,111 @@ header {
   color: whitesmoke;
 }
 
+.review-body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding-top: none;
+}
+
+.review-body .review {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 0 auto;
+  width: 60%;
+  border: 1px solid #aea0d8;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.review-body .review .little-header {
+  border-bottom: 1px solid #aea0d8;
+}
+
+.review-body .review .little-header h3, .review-body .review .little-header h4 {
+  margin-top: 0;
+}
+
+.review-body .review .little-header h3 span, .review-body .review .little-header h4 span {
+  padding: 0 5px;
+  color: #aea0d8;
+  font-size: 20px;
+  vertical-align: center;
+}
+
+.subtitle {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  text-transform: uppercase;
+  word-spacing: 0.5rem;
+  padding: 0.7rem 0;
+  color: #464646;
+  font-weight: bold;
+}
+
+.articles {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: auto;
+  width: 60%;
+}
+
+.articles section {
+  text-align: center;
+}
+
+.articles section h1 {
+  color: #464646;
+}
+
+.articles section .text h4 {
+  color: #aea0d8;
+}
+
 body {
   background-color: #f8f7f7;
   color: #272727;
   font-family: 'Poppins', sans-serif;
   min-height: 100vh;
   line-height: 1;
-  margin-bottom: 100px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+body main {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+}
+
+body footer {
+  width: 100%;
+  text-align: center;
+  color: #aea0d8;
+  height: 50px;
 }
 
 a {
@@ -388,5 +562,6 @@ h1 {
           justify-content: center;
   text-transform: uppercase;
   word-spacing: 0.5rem;
+  padding: 0.7rem 0;
 }
 /*# sourceMappingURL=main.css.map */

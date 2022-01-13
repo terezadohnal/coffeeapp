@@ -12,6 +12,12 @@
     
         }
     }
+    .container {
+        grid: none;
+        display: flex;
+        flex-direction: column;
+
+    }
 }
 
 @include media-md {
@@ -26,6 +32,9 @@
             }
     
         }
+    }
+    .container {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

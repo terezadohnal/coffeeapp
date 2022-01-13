@@ -45,25 +45,18 @@ $key=>
         </div>
 
         <div class="text">
-          <div class="text-headers">
-            <h3>{$cs['name']}</h3>
-            <h4>{$cs['city']}</h4>   
+          <div class="text-header">
+            <div class="text-headers">
+              <h3>{$cs['name']}</h3>
+              <h4>{$cs['city']}</h4>   
+            </div>
+            <div class="rating">
+              <p>{$cs['rating']}</p>
+            </div>
           </div>
           <p><a href="{link profile}?id_coffeeshop={$cs['id_coffeeshop']}">Show Profile</a></p>
         </div>
-
       </div>
-    
-    <!-- {* <div class="card">
-      <h3>Name</h3>
-      <h4>City</h4>
-      <h5>View more >></h5>
-    </div>
-    <div class="card">
-      <h3>Name</h3>
-      <h4>City</h4>
-      <h5>View more >></h5>
-    </div> *} -->
     {/foreach}
   </div>
 {/block}

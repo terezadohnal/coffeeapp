@@ -47,6 +47,12 @@
                         <p>Kids friendly</p>
                     </div>    
                 {/if}
+
+                {if $service['dogs'] == 1}
+                    <div class="option">
+                        <p>Dogs friendly</p>
+                    </div>    
+                {/if}
                 
                 {if $service['wheelchair'] == 1}
                     <div class="option">
@@ -206,14 +212,68 @@
     </div>
 
 </div>
+{if isset($loggedUser)}
+    {if $loggedUser['id_user'] == $coffeeshop['id_user'] or $loggedUser['admin'] == 1}
+        <div class="modification">
+            <div class="btn">
+                <a href="{link edit-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}">edit</a>
+            </div>
+            <div class="btn">
+                <a href="{link delete-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}" onclick="return confirm('Are you sure?')">delete</a>
+            </div>
+        </div>
+    {/if}
+{/if}
 
-<div class="modification">
-    <div class="btn">
-        <a href="{link edit-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}">edit</a>
+<h1>Reviews</h1>
+<div>    
+    <h3 class="subtitle">Add new review</h3>
+
+    {if isset ($message)}
+        <div class="alert" role="alert">{$message}</div>
+    {/if}
+
+    <form method="post" class="review-section form">
+        <div class="lines">
+            <div class="username">
+                <label for="uname">Name</label>
+                <input type="text" name="uname" id="uname" placeholder="username">
+            </div>
+            <div class="rating">
+                <label for="rating">Rating</label>
+                <select name="rating" id="rating">
+                    <option value="1">1 (low)</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5 (high)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="review">
+            <label for="review">Review: </label>
+            <textarea name="review" id="review" cols="50" rows="10" placeholder="Write down your review"></textarea>
+        </div>
+
+        <button>submit</button>
+    </form>
+</div>
+
+<div class="review-body content">
+    <h3 class="subtitle">List of reviews</h3>
+    {foreach $reviews as $r}
+    <div class="review">
+        <div class="little-header">
+            <h3>{$r['name']}</h3>
+            <h4>Rating: <span>{$r['rating']} / 5</span></h4>
+        </div>
+        <div class="textarea">
+            <p> {$r['review']}
+            </p>
+        </div>
     </div>
-    <div class="btn">
-        <a href="{link delete-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}" onclick="return confirm('Are you sure?')">delete</a>
-    </div>
+    {/foreach}
 </div>
 
 {/block}

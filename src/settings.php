@@ -1,7 +1,19 @@
 <?php
 
-// $env = Dotenv\Dotenv::create(__DIR__ . DIRECTORY_SEPARATOR . '..');
-// $env->load();
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__, "../.env");
+$dotenv->load();
+use Cloudinary\Configuration\Configuration;
+
+// configure globally via a JSON object
+
+Configuration::instance([
+  'cloud' => [
+    'cloud_name' => $_ENV['CLOUD_NAME'], 
+    'api_key' => $_ENV['API_KEY'], 
+    'api_secret' => $_ENV['API_SECRET']],
+  'url' => [
+    'secure' => true]]);
+
 
 return [
     'settings' => [

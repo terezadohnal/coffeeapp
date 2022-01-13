@@ -16,13 +16,13 @@
   "require": {
     "php": ">=5.5.0",
     "slim/slim": "^3.1",
-    "vlucas/phpdotenv": "^3.3",
+    "vlucas/phpdotenv": "^5.4",
     "monolog/monolog": "^1.17",
     "ujpef/latte-view": "^0.0.3",
-    "latte/latte": "2.4"
+    "latte/latte": "2.4",
+    "cloudinary/cloudinary_php": "^2"
   },
   "scripts": {
     "start": "php -S localhost:8080 -t public"
   }
 }
-

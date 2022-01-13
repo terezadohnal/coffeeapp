@@ -80,3 +80,34 @@
         }
     }
 }
+
+.review-section {
+    display: flex;
+    max-width: fit-content;
+    justify-content: center;
+
+    .lines {
+        .username, .rating {
+            margin: auto;
+            width: 50%;
+
+        }
+    }
+    .review {
+        display: flex;
+        flex-direction: column;
+
+        label {
+            width: 50%;
+            margin: auto;
+        }
+
+        textarea{
+            margin: 15px 0;
+            border: none;
+            box-shadow: 5px 10px $shadow-color;
+
+        }
+    }
+
+}
