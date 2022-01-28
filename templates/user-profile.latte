@@ -1,0 +1,81 @@
+{extends layout.latte}
+
+{block title}User Profile{/block}
+
+{block body}
+
+<h1>{$personal['nickname']}'s profile</h1>
+
+<div class="user-profile-content">
+    <div class="user-profile-text-content">
+        <h2>Personal info</h2>
+        <h3>Name</h3>
+        <div class="option">
+            <p>{$personal['first_name']} {$personal['last_name']}</p>
+        </div>
+
+        <h3>Birthday</h3>
+        <div class="option">
+            <p>{$personal['birthday']}</p>
+        </div>
+
+        <h3>Gender</h3>
+        <div class="option">
+            {if $personal['sex'] == 'f'}
+            <p>Female</p>
+            {else}
+            <p>Male</p>
+            {/if}
+        </div>
+
+        <h3>Profession</h3>
+        <div class="option">
+            <p>{$personal['profession']}</p>
+        </div>
+        
+        <div class="modification">
+            <div class="btn">
+                <a href="{link edit-user}?id_user={$loggedUser['id_user']}">edit</a>
+            </div>
+            <div class="btn">
+                <a href="{link delete-user}?id_user={$loggedUser['id_user']}" onclick="return confirm('Are you sure?')">delete</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="users-favourite-cs">
+        <h2>Coffeeshops you like</h2>
+        {foreach $coffeeshops as $c}
+        <div class="favourite-cs">
+            <div class="favourite-cs-name">
+                <p>{$c['name']}</p>
+            </div>
+            <div>
+                <p>{$c['rating']}</p>
+            </div>
+            <div>
+                <a href=""> Show</a>
+            </div>
+            <div class="heart">
+                <form action="/auth/coffeeshop/profile/favourite" method="post">
+                    <button>
+                        <input type="hidden" name="isFavourite" id="isFavourite" value="{$c['isFavourite']}">
+                        <input type="hidden" name="id_coffeeshop" id="id_coffeeshop" value="{$c['id_coffeeshop']}">
+                        <input type="hidden" name="source" id="source" value="user-profile">
+                        {if $c['isFavourite']}
+                        <i class="bi bi-heart-fill"></i>
+                        {else}
+                        <i class="bi bi-heart"></i>
+                        {/if}
+                    </button>
+                </form>
+
+            </div>
+        </div>
+        {/foreach}
+        
+    </div>
+
+</div>
+
+{/block}

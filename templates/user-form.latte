@@ -1,0 +1,32 @@
+<form method="post" action="/sign-up" class="form">
+
+   <label for="first_name"> First name </label>
+      <input type="text" name="first_name" id="first_name" placeholder="First name" value="{$user['first_name']}" autofocus  required>
+
+   <label for="last_name"> Last name </label>
+      <input type="text" name="last_name" id="last_name" placeholder="Last name" value="{$user['last_name']}" required>
+
+   <label for="nickname"> Nickname </label>
+      <input type="text" name="nickname" id="nickname" placeholder="Nickname" value="{$user['nickname']}" required >
+
+   <label for="birthday"> Birthday </label>
+      <input type="date" name="birthday" id="birthday" placeholder="Birthday" value="{$user['birthday']}">
+
+   <label for="sex"> Sex </label>
+   <select type="text" name="gender" id="sex">
+   {if $user['sex'] == 'm'}
+      <option value="m" >Male</option>
+      {else}
+      <option value="f" >Female</option>
+      {/if}
+   </select>
+
+   <label for="profession"> Profession </label>
+      <input type="text" name="profession" id="profession" placeholder="Profession" value="{$user['profession']}" required>
+
+   <label for="password"> Password </label>
+      <input type="password" name="password" id="password" placeholder="Password" required>
+   
+      <button>Submit</button>
+
+</form>

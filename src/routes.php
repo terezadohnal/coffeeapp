@@ -32,6 +32,8 @@ $app->get('/coffeeshops', function (Request $request, Response $response, $args)
 $app->get('/coffeeshop/profile', function (Request $request, Response $response, $args) {
     // Render add-coffeeshop view
     $id_coffeeshop = $request->getQueryParam('id_coffeeshop');
+    $id_user = $_SESSION['logged_user']['id_user'];
+
 
     $stmt = $this->db->prepare('SELECT * FROM coffeeshops WHERE id_coffeeshop = :idc');
     $stmt->bindParam(':idc', $id_coffeeshop);
@@ -58,6 +60,18 @@ $app->get('/coffeeshop/profile', function (Request $request, Response $response,
     $stmt->execute();
     $data['reviews'] = $stmt->fetchall();
 
+    $stmt = $this->db->prepare('SELECT * FROM favourite WHERE id_user = :idu');
+    $stmt->bindParam(':idu', $id_user);
+    $stmt->execute();
+    $tmp = $stmt->fetchall();
+
+    $data['isFavourite'] = false;
+
+    foreach($tmp as $csId){
+        if($csId['id_coffeeshop'] == $id_coffeeshop){
+            $data['isFavourite'] = true;
+        }
+    }
 
     return $this->view->render($response, 'profile.latte', $data);
 })->setName('profile');
@@ -82,6 +96,32 @@ $app->post('/coffeeshop/profile', function (Request $request, Response $response
 
 
 $app->group('/auth', function() use($app){
+
+    $app->post('/coffeeshop/profile/favourite', function (Request $request, Response $response, $args){
+        $id_coffeeshop = $request->getQueryParam('id_coffeeshop');
+        $id_user = $_SESSION['logged_user']['id_user'];
+        $data = $request->getParsedBody();
+
+        echo var_dump($data['id_coffeeshop']);
+    
+        if($data['isFavourite'] == false){
+            $stmt = $this->db->prepare('INSERT INTO favourite (id_user, id_coffeeshop) VALUES (:idu, :idc)');
+            $stmt->bindValue(':idu', $id_user);
+            $stmt->bindValue(':idc', $data['id_coffeeshop']);
+            $stmt->execute();
+        } else {
+            $stmt = $this->db->prepare('DELETE FROM favourite WHERE id_user = :idu AND id_coffeeshop = :idc');
+            $stmt->bindValue(':idu', $id_user);
+            $stmt->bindValue(':idc', $data['id_coffeeshop']);
+            $stmt->execute();
+        }
+
+       if ($data['source'] == "coffeeshop-profile"){
+           return $response->withHeader('Location', $this->router->pathFor('profile') . '?id_coffeeshop=' . $data['id_coffeeshop']);
+       } else {
+        return $response->withHeader('Location', $this->router->pathFor('user-profile') . '?id_user=' . $id_user);
+       }
+    });
 
     //Edit coffeeshop's info - nacitani
     $app->get('/edit-coffeeshop', function (Request $request, Response $response, $args) {
@@ -321,6 +361,109 @@ $app->group('/auth', function() use($app){
         return $response->withHeader('Location', $this->router->pathFor('profile') . '?id_coffeeshop=' . $id_coffeeshop['id']);
     })->setName('add-coffeeshop');
 
+    $app->get('/user-profile', function (Request $request, Response $response, $args) {
+        // Render user profile
+        $id_user = $request->getQueryParam('id_user');
+
+        $stmt = $this->db->prepare('SELECT id_user, nickname, first_name, last_name, sex, birthday, profession FROM users WHERE id_user = :idu');
+        $stmt->bindValue(':idu', $id_user);
+        $stmt->execute();
+        $data['personal'] = $stmt->fetch();
+
+        $stmt = $this->db->prepare('SELECT cs.id_coffeeshop, cs.name FROM coffeeshops AS cs JOIN favourite AS f ON cs.id_coffeeshop = f.id_coffeeshop');
+        $stmt->execute();
+        $data['coffeeshops'] = $stmt->fetchall();
+
+        echo var_dump($data['coffeeshops']);
+
+        $stmt = $this->db->prepare('SELECT * FROM favourite WHERE id_user = :idu');
+        $stmt->bindParam(':idu', $id_user);
+        $stmt->execute();
+        $tmp = $stmt->fetchall();
+
+        $counter = 0;
+        
+        foreach($data['coffeeshops'] as $cid){
+            $stmt = $this->db->prepare('SELECT avg(rating) as rating FROM reviews WHERE id_coffeeshop = :idc');
+            $stmt->bindValue(':idc', $cid['id_coffeeshop']);
+            $stmt->execute();
+            $total = $stmt->fetch(); 
+            $data['coffeeshops'][$counter]['rating'] = number_format(($total['rating']), 1);
+
+            $data['coffeeshops'][$counter]['isFavourite'] = false;
+
+            foreach($tmp as $csId){
+                if($csId['id_coffeeshop'] == $cid['id_coffeeshop']){
+                    $data['coffeeshops'][$counter]['isFavourite'] = true;
+                }
+            }
+            $counter++;
+        }
+
+        echo var_dump($request->getUri()->getPath());
+
+        return $this->view->render($response, 'user-profile.latte', $data);
+    })->setName('user-profile');
+
+    $app->get('/edit-user', function (Request $request, Response $response, $args) {
+        // Render add-coffeeshop view
+        $params = $request->getQueryParams(); # $params = [id_person => 1232, firstname => aaa]
+
+        if(!empty($params['id_user'])){
+            $stmt = $this->db->prepare('SELECT * FROM users WHERE id_user = :idu');
+            $stmt->bindValue(':idu', $params['id_user']);
+            $stmt->execute();
+            $data['user'] = $stmt->fetch();
+
+            if(empty($data['user'])) {
+                exit('person not found');
+            }else {
+                return $this->view->render($response, 'edit-user.latte', $data);
+            }
+        }
+
+    })->setName('edit-user');
+
+    $app->post('/edit-user', function (Request $request, Response $response, $args){
+        $formData = $request->getParsedBody();
+        $passwd_hash = hash('sha256', $formData['password']);
+        // $id_user = $_SESSION['logged_user']['id_user'];
+        $id_user = $request->getQueryParam('id_user');
+    
+        $stmt = $this->db->prepare('UPDATE users SET nickname = :nn, first_name = :fn, last_name = :ln, birthday = :bd, sex = :sx, password = :pw WHERE id_user = :idu');
+        $stmt->bindValue(':nn', $formData['nickname']);
+        $stmt->bindValue(':fn', $formData['first_name']);
+        $stmt->bindValue(':ln', $formData['last_name']);
+        $stmt->bindValue(':bd', empty($formData['birthday']) ? null : $formData['birthday']);
+        $stmt->bindValue(':sx', empty($formData['sex']) ? null : $formData['sex']);
+        $stmt->bindValue(':pf', $formData['profession']);
+        $stmt->bindValue(':pw', $passwd_hash);
+        $stmt->bindValue(':idu', $id_user);
+        $stmt->execute();
+        
+        return $response->withHeader('Location', $this->router->pathFor('user-profile') . '?id_user=' . $id_user);
+    });
+
+    $app->get('/delete-user', function (Request $request, Response $response, $args) {
+        // Render add-coffeeshop view
+        $id_user = $request->getQueryParam('id_user'); //vyctu id coffeeshopu z url
+
+        if(!empty($id_user)){
+            try{
+                $stmt = $this->db->prepare('DELETE FROM users WHERE id_user = :idu');
+                $stmt->bindValue(':idu', $id_user);
+                $stmt->execute();
+
+            } catch (PDOexception $e) {
+                exit("error occured");
+            }
+        } else {
+            exit("Person is missing");
+        }
+
+        return $response->withHeader('Location', $this->router->pathFor('logout'));
+    })->setName('delete-user');
+
 })->add(function($request, $response, $next){
     if(!empty($_SESSION['logged_user'])){ 
         return $next($request, $response);
@@ -332,7 +475,16 @@ $app->group('/auth', function() use($app){
 
 $app->get('/sign-up', function (Request $request, Response $response, $args) {
     // Render sign-up view
-    return $this->view->render($response, 'sign-up.latte');
+    $data['user'] = [
+        'first_name' =>'',
+        'last_name' => '',
+        'nickname' => '',
+        'birthday' => null,
+        'sex' => '',
+        'profession' => ''
+    ];
+
+    return $this->view->render($response, 'sign-up.latte', $data);
 })->setName('sign-up');
 
 $app->post('/sign-up', function (Request $request, Response $response, $args){

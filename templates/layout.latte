@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{$basePath}/css/main.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <script type="text/javascript" src="{$basePath}/js/jquery.js"></script>
     <script type="text/javascript" src="{$basePath}/css/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -32,6 +33,9 @@
             {if isset($loggedUser)}
             <li class="menu-item"> 
                 <a href="{link add-coffeeshop}" class="menu-nav-link">ADD NEW COFFEESHOP</a>
+            </li>
+            <li class="menu-item"> 
+                <a href="{link user-profile}?id_user={$loggedUser['id_user']}" class="menu-nav-link">PROFILE</a>
             </li>
             <li class="menu-item"> 
                 <a href="{link logout}" class="menu-nav-link">LOG OUT</a> 

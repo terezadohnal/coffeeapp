@@ -3,9 +3,28 @@
 {block title}Profile{/block}
 
 {block body}
+<div class="cs-title">
+    <div class="name">
+        <h1>{$coffeeshop['name']}</h1>
+    </div>
+    <div class="heart">
+        <form action="/auth/coffeeshop/profile/favourite" method="post">
+            <button>
+                <input type="hidden" name="isFavourite" id="isFavourite" value="{$isFavourite}">
+                <input type="hidden" name="id_coffeeshop" id="id_coffeeshop" value="{$coffeeshop['id_coffeeshop']}">
+                <input type="hidden" name="source" id="source" value="coffeeshop-profile">
 
-<h1>{$coffeeshop['name']}</h1>
+                {if $isFavourite}
+                <i class="bi bi-heart-fill"></i>
+                {else}
+                <i class="bi bi-heart"></i>
+                {/if}
+            </button>
+        </form>
 
+    </div>
+</div>
+    
 <div class="content">
     <div class="photo">
         <img src={$coffeeshop['photo']} alt="">
