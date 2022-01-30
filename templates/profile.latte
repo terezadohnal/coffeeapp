@@ -232,7 +232,7 @@
 
 </div>
 {if isset($loggedUser)}
-    {if $loggedUser['id_user'] == $coffeeshop['id_user'] or $loggedUser['admin'] == 1}
+    {if $loggedUser['id_user'] == $coffeeshop['id_user'] or $loggedUser['isAdmin'] == 1}
         <div class="modification">
             <div class="btn">
                 <a href="{link edit-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}">edit</a>
@@ -240,7 +240,7 @@
             <div class="btn">
                 <a href="{link delete-coffeeshop}?id_coffeeshop={$coffeeshop['id_coffeeshop']}" onclick="return confirm('Are you sure?')">delete</a>
             </div>
-        </div>
+        </div>  
     {/if}
 {/if}
 

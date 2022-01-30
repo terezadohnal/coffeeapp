@@ -73,6 +73,8 @@ $app->get('/coffeeshop/profile', function (Request $request, Response $response,
         }
     }
 
+    echo var_dump($_SESSION['logged_user']);
+
     return $this->view->render($response, 'profile.latte', $data);
 })->setName('profile');
 
@@ -90,6 +92,7 @@ $app->post('/coffeeshop/profile', function (Request $request, Response $response
         $stmt->bindValue(':n', empty($data['uname']) ? 'anonymous' : $data['uname']);
         $stmt->execute();
     }
+    
 
     return $response->withHeader('Location', $this->router->pathFor('profile') . '?id_coffeeshop=' . $id_coffeeshop);
 });
@@ -365,16 +368,17 @@ $app->group('/auth', function() use($app){
         // Render user profile
         $id_user = $request->getQueryParam('id_user');
 
-        $stmt = $this->db->prepare('SELECT id_user, nickname, first_name, last_name, sex, birthday, profession FROM users WHERE id_user = :idu');
+        $stmt = $this->db->prepare('SELECT id_user, nickname, first_name, last_name, gender, birthday, profession FROM users WHERE id_user = :idu');
         $stmt->bindValue(':idu', $id_user);
         $stmt->execute();
         $data['personal'] = $stmt->fetch();
 
-        $stmt = $this->db->prepare('SELECT cs.id_coffeeshop, cs.name FROM coffeeshops AS cs JOIN favourite AS f ON cs.id_coffeeshop = f.id_coffeeshop');
+        $stmt = $this->db->prepare('SELECT cs.id_coffeeshop, cs.name FROM coffeeshops AS cs JOIN favourite AS f ON cs.id_coffeeshop = f.id_coffeeshop AND f.id_user = :idu');
+        $stmt->bindValue(':idu', $id_user);
         $stmt->execute();
         $data['coffeeshops'] = $stmt->fetchall();
 
-        echo var_dump($data['coffeeshops']);
+        // echo var_dump($data['coffeeshops']);
 
         $stmt = $this->db->prepare('SELECT * FROM favourite WHERE id_user = :idu');
         $stmt->bindParam(':idu', $id_user);
@@ -400,7 +404,7 @@ $app->group('/auth', function() use($app){
             $counter++;
         }
 
-        echo var_dump($request->getUri()->getPath());
+        // echo var_dump($request->getUri()->getPath());
 
         return $this->view->render($response, 'user-profile.latte', $data);
     })->setName('user-profile');
@@ -427,15 +431,15 @@ $app->group('/auth', function() use($app){
     $app->post('/edit-user', function (Request $request, Response $response, $args){
         $formData = $request->getParsedBody();
         $passwd_hash = hash('sha256', $formData['password']);
-        // $id_user = $_SESSION['logged_user']['id_user'];
-        $id_user = $request->getQueryParam('id_user');
+        $id_user = $_SESSION['logged_user']['id_user'];
+        // $id_user = $request->getQueryParam('id_user');
     
-        $stmt = $this->db->prepare('UPDATE users SET nickname = :nn, first_name = :fn, last_name = :ln, birthday = :bd, sex = :sx, password = :pw WHERE id_user = :idu');
+        $stmt = $this->db->prepare('UPDATE users SET nickname = :nn, first_name = :fn, last_name = :ln, birthday = :bd, gender = :g, profession = :pf, password = :pw WHERE id_user = :idu');
         $stmt->bindValue(':nn', $formData['nickname']);
         $stmt->bindValue(':fn', $formData['first_name']);
         $stmt->bindValue(':ln', $formData['last_name']);
         $stmt->bindValue(':bd', empty($formData['birthday']) ? null : $formData['birthday']);
-        $stmt->bindValue(':sx', empty($formData['sex']) ? null : $formData['sex']);
+        $stmt->bindValue(':g', empty($formData['gender']) ? null : $formData['gender']);
         $stmt->bindValue(':pf', $formData['profession']);
         $stmt->bindValue(':pw', $passwd_hash);
         $stmt->bindValue(':idu', $id_user);
@@ -480,7 +484,7 @@ $app->get('/sign-up', function (Request $request, Response $response, $args) {
         'last_name' => '',
         'nickname' => '',
         'birthday' => null,
-        'sex' => '',
+        'gender' => '',
         'profession' => ''
     ];
 
@@ -491,13 +495,13 @@ $app->post('/sign-up', function (Request $request, Response $response, $args){
     $formData = $request->getParsedBody();
     $passwd_hash = hash('sha256', $formData['password']);
 
-    $stmt = $this->db->prepare('INSERT INTO users (nickname, first_name, last_name, birthday, sex, profession, password) VALUES (:nn, :fn, :ln, :bd, :sx, :pf, :pw)');
+    $stmt = $this->db->prepare('INSERT INTO users (nickname, first_name, last_name, birthday, gender, profession, password) VALUES (:nn, :fn, :ln, :bd, :g, :pf, :pw)');
 
     $stmt->bindValue(':nn', $formData['nickname']);
     $stmt->bindValue(':fn', $formData['first_name']);
     $stmt->bindValue(':ln', $formData['last_name']);
     $stmt->bindValue(':bd', empty($formData['birthday']) ? null : $formData['birthday']);
-    $stmt->bindValue(':sx', empty($formData['sex']) ? null : $formData['sex']);
+    $stmt->bindValue(':g', empty($formData['gender']) ? null : $formData['gender']);
     $stmt->bindValue(':pf', $formData['profession']);
     $stmt->bindValue(':pw', $passwd_hash);
     $stmt->execute();
@@ -515,7 +519,7 @@ $app->post('/login', function (Request $request, Response $response, $args) {
     $formData = $request->getParsedBody();
     $passwd_hash = hash('sha256', $formData['password']);
 
-    $stmt = $this->db->prepare('SELECT id_user, first_name, nickname, last_name FROM users WHERE lower(nickname) = lower(:nn) AND password = :pw');
+    $stmt = $this->db->prepare('SELECT id_user, first_name, nickname, last_name, isAdmin FROM users WHERE lower(nickname) = lower(:nn) AND password = :pw');
     $stmt->bindValue(':nn', $formData['nickname']);
     $stmt->bindValue(':pw', $passwd_hash);
     $stmt->execute();

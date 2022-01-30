@@ -662,6 +662,7 @@ header {
 .user-profile-content .users-favourite-cs .favourite-cs .heart button {
   border: none;
   background-color: transparent;
+  cursor: pointer;
 }
 
 .user-profile-content .users-favourite-cs .favourite-cs .heart button i {

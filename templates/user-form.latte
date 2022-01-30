@@ -1,4 +1,6 @@
-<form method="post" action="/sign-up" class="form">
+<h1>{$title}</h1>   
+
+<form method="post" action={$route} class="form">
 
    <label for="first_name"> First name </label>
       <input type="text" name="first_name" id="first_name" placeholder="First name" value="{$user['first_name']}" autofocus  required>
@@ -12,12 +14,14 @@
    <label for="birthday"> Birthday </label>
       <input type="date" name="birthday" id="birthday" placeholder="Birthday" value="{$user['birthday']}">
 
-   <label for="sex"> Sex </label>
-   <select type="text" name="gender" id="sex">
-   {if $user['sex'] == 'm'}
-      <option value="m" >Male</option>
-      {else}
+   <label for="gender"> Gender </label>
+   <select type="text" name="gender" id="gender">
+   {if $user['gender'] == 'm'}
+      <option value="m" selected>Male</option>
       <option value="f" >Female</option>
+      {else}
+      <option value="m" >Male</option>
+      <option value="f" selected>Female</option>
       {/if}
    </select>
 
